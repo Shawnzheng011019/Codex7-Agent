@@ -54,7 +54,7 @@ class SWEBenchEvaluation:
         assert dataset in ["SWE-bench", "SWE-bench_Lite", "SWE-bench_Verified"], (
             f"Invalid dataset name: {dataset}"
         )
-        self.dataset = load_dataset(f"princeton-nlp/{dataset}", split="test")
+        self.dataset = load_dataset(f"SWE-bench/{dataset}", split="test")
         self.dataset_name = dataset
 
         self.docker_client: DockerClient = from_env()
