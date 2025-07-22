@@ -1,5 +1,5 @@
 .claude_cache/
-.claude_logs/
+.claude_logs/*
 .claude_memory/
 .claude_state/
 .claude_logs/events.log
@@ -7,6 +7,7 @@
 # Ignore example config files
 *.example
 *_example.*
+src/evaluation/SWE-bench/
 
 # Ignore local config files
 *_local.json
