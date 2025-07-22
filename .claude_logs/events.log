@@ -1,0 +1,2 @@
+2025-07-22 16:00:36,095 - agent_events - INFO - State change: {'key': 'loop_count', 'value': 1} from agent_loop
+2025-07-22 16:00:36,136 - agent_events - INFO - State change: {'key': 'loop_count', 'value': 2} from agent_loop
