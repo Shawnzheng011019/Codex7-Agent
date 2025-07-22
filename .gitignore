@@ -4,9 +4,9 @@
 .claude_state/
 .claude_logs/events.log
 
-# Ignore example config files
-*.example
-*_example.*
+# Ignore config files but keep examples
+codex7_config.json
+src/retrieval/embedding_config.json
 src/evaluation/SWE-bench/
 
 # Ignore local config files

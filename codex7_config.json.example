@@ -1,0 +1,43 @@
+{
+  "llm": {
+    "provider": "openai",
+    "model": "gpt-4-turbo-preview",
+    "api_key": "",
+    "base_url": "https://api.openai.com/v1",
+    "max_tokens": 4000,
+    "temperature": 0.1
+  },
+  "retrieval": {
+    "enabled": true,
+    "provider": "milvus",
+    "embedding_model": "text-embedding-3-small",
+    "embedding_api_key": "",
+    "collection_name": "codex7_embeddings",
+    "top_k": 10,
+    "threshold": 0.7
+  },
+  "tools": {
+    "max_steps": 50,
+    "timeout": 300,
+    "enable_bash": true,
+    "enable_python": true,
+    "enable_web_search": false
+  },
+  "workspace": {
+    "max_file_size": 1048576,
+    "max_files": 1000,
+    "exclude_patterns": [
+      "*.pyc",
+      "__pycache__",
+      ".git",
+      "node_modules",
+      "*.log"
+    ]
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/codex7_agent.log",
+    "max_size": 10485760,
+    "backup_count": 5
+  }
+}

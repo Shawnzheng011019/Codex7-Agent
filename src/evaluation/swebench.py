@@ -72,9 +72,7 @@ class SWEBenchEvaluation:
         if not self.working_dir.exists():
             self.working_dir.mkdir(parents=True, exist_ok=True)
 
-        self.trae_config_file_name = codex7_config_file_name
-
-        shutil.copyfile(self.trae_config_file_name, self.working_dir / "codex7_config_local.json")
+        self.codex7_config_file_name = codex7_config_file_name
 
         self.pull_images()
 
@@ -147,7 +145,7 @@ class SWEBenchEvaluation:
             image = self.docker_client.images.pull("ubuntu:22.04")
 
         repo_root_path = Path(__file__).parent.parent
-        assert (repo_root_path / "trae_agent" / "__init__.py").is_file()
+        assert (repo_root_path / "src" / "codex7_agent" / "__init__.py").is_file()
 
         container = self.docker_client.containers.run(
             image=image,
@@ -156,8 +154,8 @@ class SWEBenchEvaluation:
             tty=True,
             stdin_open=True,
             volumes={
-                self.working_dir.absolute().as_posix(): {"bind": "/trae-workspace", "mode": "rw"},
-                repo_root_path.absolute().as_posix(): {"bind": "/trae-src", "mode": "ro"},
+                self.working_dir.absolute().as_posix(): {"bind": "/codex7-workspace", "mode": "rw"},
+                repo_root_path.absolute().as_posix(): {"bind": "/codex7-src", "mode": "ro"},
             },
             environment=self.docker_env_config.get("preparation_env", None),  # pyright: ignore[reportUnknownMemberType]
         )
@@ -166,9 +164,9 @@ class SWEBenchEvaluation:
             "apt-get update",
             "apt-get install -y curl",
             "curl -LsSf https://astral.sh/uv/install.sh | sh",
-            "rm -rf /trae-workspace/codex7-agent && mkdir /trae-workspace/codex7-agent",
-            "cp -r -t /trae-workspace/codex7-agent/ /trae-src/src/codex7_agent /trae-src/requirements.txt",
-            "cd /trae-workspace/codex7-agent && source $HOME/.local/bin/env && pip install -r requirements.txt",
+            "rm -rf /codex7-workspace/codex7-agent && mkdir /codex7-workspace/codex7-agent",
+            "cp -r -t /codex7-workspace/codex7-agent/ /codex7-src/src/codex7_agent /codex7-src/requirements.txt",
+            "cd /codex7-workspace/codex7-agent && source $HOME/.local/bin/env && pip install -r requirements.txt",
         ]
 
         for command in tqdm(commands, desc="Building codex7-agent inside base Docker container"):
@@ -184,7 +182,7 @@ class SWEBenchEvaluation:
                 exit(-1)
 
         with open(self.working_dir / "codex7-agent.tar", "wb") as f:
-            bits, _ = container.get_archive("/trae-workspace/codex7-agent")
+            bits, _ = container.get_archive("/codex7-workspace/codex7-agent")
             for chunk in bits:
                 f.write(chunk)
 
@@ -226,9 +224,9 @@ class SWEBenchEvaluation:
             tty=True,
             stdin_open=True,
             volumes={
-                self.working_dir.absolute().as_posix(): {"bind": "/trae-workspace", "mode": "rw"}
+                self.working_dir.absolute().as_posix(): {"bind": "/codex7-workspace", "mode": "rw"}
             },
-            working_dir="/trae-workspace",
+            working_dir="/codex7-workspace",
             environment=self.docker_env_config.get("experiment_env", None),
             stream=True,
         )
@@ -275,7 +273,7 @@ class SWEBenchEvaluation:
         problem_statement_path = instance_dir + "/problem_statement.txt"
         patch_file_path = instance_dir + f"/{instance['instance_id']}.patch"
         traj_path = instance_dir + f"/{instance['instance_id']}.json"
-        command = f'python3 -m codex7_agent --file {problem_statement_path} --working-dir="/testbed/" --config-file codex7_config_local.json --max-steps 200 --must-patch --patch-path {patch_file_path} --trajectory-file {traj_path}'
+        command = f'python3 -m codex7_agent --file {problem_statement_path} --working-dir="/testbed/" --config-file "{self.codex7_config_file_name}" --max-steps 200 --must-patch --patch-path {patch_file_path} --trajectory-file {traj_path}'
         new_command = f"/bin/bash -c '{command}'"
 
         try:
@@ -375,7 +373,7 @@ def main():
         "--run-id",
         type=str,
         required=False,
-        default="trae-agent",
+        default="codex7-agent",
         help="Run ID for SWE-bench evaluation.",
     )
     # expr: only generate patches

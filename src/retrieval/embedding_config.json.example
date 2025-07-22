@@ -1,0 +1,32 @@
+{
+  "embedding": {
+    "provider": "openai",
+    "model": "text-embedding-3-small",
+    "api_key": "",
+    "base_url": "https://api.openai.com/v1",
+    "chunk_size": 1000,
+    "chunk_overlap": 200
+  },
+  "storage": {
+    "provider": "milvus",
+    "host": "localhost",
+    "port": 19530,
+    "collection_name": "codex7_embeddings",
+    "dimension": 1536
+  },
+  "retrieval": {
+    "top_k": 10,
+    "similarity_threshold": 0.7,
+    "max_distance": 1.0
+  },
+  "indexing": {
+    "batch_size": 100,
+    "max_workers": 4,
+    "refresh_on_start": false
+  },
+  "cache": {
+    "enabled": true,
+    "ttl": 3600,
+    "max_size": 1000
+  }
+}
