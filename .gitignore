@@ -2,6 +2,7 @@
 .claude_logs/
 .claude_memory/
 .claude_state/
+SWE-bench/
 
 # Ignore config files but keep examples
 codex7_config.json
