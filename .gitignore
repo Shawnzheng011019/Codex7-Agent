@@ -1,8 +1,7 @@
 .claude_cache/
-.claude_logs/*
+.claude_logs/
 .claude_memory/
 .claude_state/
-.claude_logs/events.log
 
 # Ignore config files but keep examples
 codex7_config.json
