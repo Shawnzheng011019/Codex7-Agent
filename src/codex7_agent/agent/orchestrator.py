@@ -12,11 +12,15 @@ import uuid
 from .loop import AgentLoopError, Context, Message, MessageType, LoopStatus, ToolCall
 from ..utils.intent_recognition import IntentRecognizer, IntentRecognitionResult
 from .context_manager import ContextManager
-from ..tools.tool_manager import ToolRegistry, ToolOrchestrator, create_default_registry
+from ..tools.tool_manager import ToolRegistry, ToolOrchestrator, create_default_registry, ToolCategory
 from ..tools.task_tool import TaskTool
 from .state_manager import StateManager
 from ..prompt.prompt_generator import PromptGenerator
 from ..config import get_config_manager
+
+# Import tools to register them
+from ..tools.bash_tool import BashTool
+from ..tools.edit_tool import TextEditorTool
 
 
 @dataclass
@@ -59,6 +63,22 @@ class AgentLoopOrchestrator:
         self.prompt_generator = PromptGenerator()
         self.intent_recognizer = IntentRecognizer(self.llm_config)
         self.registry = create_default_registry()
+        
+        # Register existing tools with the registry
+        self.registry.register_adapted_tool(
+            BashTool(),
+            category=ToolCategory.SYSTEM,
+            is_concurrency_safe=False,
+            priority=6
+        )
+        
+        self.registry.register_adapted_tool(
+            TextEditorTool(),
+            category=ToolCategory.FILESYSTEM,
+            is_concurrency_safe=False,
+            priority=8
+        )
+        
         self.tool_orchestrator = ToolOrchestrator(self.registry)
         self.task_tool = TaskTool(
             self.registry, 
