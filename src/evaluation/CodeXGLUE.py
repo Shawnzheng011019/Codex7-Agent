@@ -15,25 +15,17 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 import tempfile
 import shutil
-
-# TODO: Add these imports when dependencies are installed
-try:
-    import torch
-    from transformers import (
-        AutoTokenizer, AutoModel, AutoModelForSequenceClassification,
-        AutoModelForSeq2SeqLM, Trainer, TrainingArguments
-    )
-    from datasets import load_dataset, Dataset
-    from sklearn.metrics import accuracy_score, precision_recall_fscore_support
-    from sklearn.model_selection import train_test_split
-    import pandas as pd
-    import numpy as np
-    from tqdm import tqdm
-except ImportError as e:
-    print(f"⚠️  Missing dependency: {e}")
-    print("Run: ./CodeXGLUE.sh to setup environment")
-    sys.exit(1)
-
+import torch
+from transformers import (
+    AutoTokenizer, AutoModel, AutoModelForSequenceClassification,
+    AutoModelForSeq2SeqLM, Trainer, TrainingArguments
+)
+from datasets import load_dataset, Dataset
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+from sklearn.model_selection import train_test_split
+import pandas as pd
+import numpy as np
+from tqdm import tqdm
 
 class CodeXGLUEBenchmark:
     """CodeXGLUE benchmark runner"""

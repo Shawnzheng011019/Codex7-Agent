@@ -15,19 +15,12 @@ from typing import Dict, List, Any
 import logging
 import tempfile
 import shutil
-
-# TODO: Add these imports when dependencies are installed
-try:
-    import openai
-    import anthropic
-    import docker
-    import pandas as pd
-    import numpy as np
-    from tqdm import tqdm
-except ImportError as e:
-    print(f"⚠️  Missing dependency: {e}")
-    print("Run: ./da-code.sh to setup environment")
-    sys.exit(1)
+import openai
+import anthropic
+import docker
+import pandas as pd
+import numpy as np
+from tqdm import tqdm
 
 
 class DACodeBenchmark:
